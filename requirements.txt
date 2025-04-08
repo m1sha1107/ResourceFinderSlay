@@ -5,3 +5,5 @@ google-generativeai==0.5.2
 python-dotenv==1.0.1
 lxml==5.1.0                 # Faster parsing (used by BeautifulSoup)
 PyMuPDF==1.23.9             # PDF parsing, if needed
+google-search-results==1.2.0  # Google search API
+feedparser==6.0.10          # RSS feed parsing
