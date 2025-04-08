@@ -1,8 +1,11 @@
 import os
+import urllib.parse
 from flask import Blueprint, request, render_template
 from dotenv import load_dotenv
 import feedparser
 from serpapi import GoogleSearch
+import requests
+import google.generativeai as genai
 
 # Load API keys from .env
 load_dotenv()
@@ -17,7 +20,8 @@ def index():
 # Fetch research papers from arXiv
 def fetch_arxiv_papers(query, max_results=3):
     base_url = "http://export.arxiv.org/api/query?"
-    search_url = f"{base_url}search_query=all:{query}&start=0&max_results={max_results}"
+    encoded_query = urllib.parse.quote(query)
+    search_url = f"{base_url}search_query=all:{encoded_query}&start=0&max_results={max_results}"
     feed = feedparser.parse(search_url)
 
     results = []
@@ -53,13 +57,43 @@ def fetch_web_results(query, max_results=5):
 
 # Route to process search and show results
 @main.route("/search", methods=["POST"])
+@main.route("/search", methods=["POST"])
 def search():
     keywords = request.form.get("keywords")
 
-    # Fetch both types of resources
+    # Fetch all content
     papers = fetch_arxiv_papers(keywords)
     web_articles = fetch_web_results(keywords)
+    yt_videos = fetch_youtube_videos(keywords)
 
-    all_resources = papers + web_articles
+    all_resources = papers + web_articles + yt_videos
 
     return render_template("results.html", keywords=keywords, resources=all_resources)
+
+def fetch_youtube_videos(query, max_results=3):
+    api_key = os.getenv("YOUTUBE_API_KEY")
+    url = "https://www.googleapis.com/youtube/v3/search"
+    params = {
+        "part": "snippet",
+        "q": query,
+        "type": "video",
+        "maxResults": max_results,
+        "key": api_key
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    videos = []
+    for item in data.get("items", []):
+        video_id = item["id"]["videoId"]
+        video_url = f"https://www.youtube.com/watch?v={video_id}"
+        snippet = item["snippet"]
+
+        videos.append({
+            "title": snippet["title"],
+            "type": "YouTube Video",
+            "link": video_url,
+            "description": snippet["description"][:200] + "..."
+        })
+    return videos
