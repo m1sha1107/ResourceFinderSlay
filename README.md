@@ -50,6 +50,10 @@ Sagey is your cozy research assistant, designed to help you find and organize in
 
 4. Explore the results, including research papers, web articles, and YouTube videos.
 
+## Demo
+
+Check out the [demo video](https://youtu.be/LuI4r41VIjU) to see Sagey in action!
+
 ## File Structure
 
 ```
