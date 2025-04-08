@@ -1,15 +1,21 @@
-from flask import Blueprint, render_template, request
+import os
+from flask import Blueprint
+from dotenv import load_dotenv
+import google.generativeai as genai
 
-main = Blueprint('main', __name__)
+# Load environment variables from .env
+load_dotenv()
 
-@main.route("/", methods=["GET", "POST"])
-def index():
-    results = []
-    if request.method == "POST":
-        keywords = request.form.get("keywords")
-        # Later: pass to search/scraper
-        results = [
-            {"title": "Dummy Result 1", "url": "http://example.com", "summary": "Lorem ipsum..."},
-            {"title": "Dummy Result 2", "url": "http://example.org", "summary": "Dolor sit amet..."},
-        ]
-    return render_template("index.html", results=results)
+# Configure Gemini API
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise EnvironmentError("GEMINI_API_KEY not found in .env file.")
+genai.configure(api_key=api_key)
+
+# Initialize Flask Blueprint for routes
+main = Blueprint("main", __name__)
+
+# Example route (temporary for testing)
+@main.route("/")
+def home():
+    return "Flask App is running and Gemini API is configured."
