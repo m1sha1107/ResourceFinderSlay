@@ -1,20 +1,15 @@
-{% extends "layout.html" %}
-
-{% block content %}
-  <h1>Search for Resources</h1>
-  <form method="POST">
-    <input type="text" name="keywords" placeholder="Enter keywords" required>
-    <button type="submit">Search</button>
-  </form>
-
-  {% if results %}
-    <h2>Results</h2>
-    {% for item in results %}
-      <div class="card">
-        <h4>{{ item.title }}</h4>
-        <p>{{ item.summary }}</p>
-        <a href="{{ item.url }}">Visit</a>
-      </div>
-    {% endfor %}
-  {% endif %}
-{% endblock %}
+<!-- app/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediaFinder</title>
+</head>
+<body>
+    <h1>MediaFinder</h1>
+    <form method="POST" action="/search">
+        <input type="text" name="keywords" placeholder="Enter keywords..." required>
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

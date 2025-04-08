@@ -1,0 +1,33 @@
+<!-- app/templates/results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results for "{{ keywords }}"</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            max-width: 500px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Results for: "{{ keywords }}"</h1>
+
+    {% for item in resources %}
+        <div class="card">
+            <h3>{{ item.title }}</h3>
+            <p><strong>Type:</strong> {{ item.type }}</p>
+            <p><strong>Description:</strong> {{ item.description }}</p>
+            <a href="{{ item.link }}" target="_blank">Visit Source</a>
+        </div>
+    {% endfor %}
+
+    <br>
+    <a href="/">Back to search</a>
+</body>
+</html>

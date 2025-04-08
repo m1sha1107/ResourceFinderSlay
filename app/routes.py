@@ -1,21 +1,35 @@
-import os
-from flask import Blueprint
-from dotenv import load_dotenv
-import google.generativeai as genai
+from flask import Blueprint, request, render_template
 
-# Load environment variables from .env
-load_dotenv()
-
-# Configure Gemini API
-api_key = os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise EnvironmentError("GEMINI_API_KEY not found in .env file.")
-genai.configure(api_key=api_key)
-
-# Initialize Flask Blueprint for routes
 main = Blueprint("main", __name__)
 
-# Example route (temporary for testing)
-@main.route("/")
-def home():
-    return "Flask App is running and Gemini API is configured."
+@main.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
+@main.route("/search", methods=["POST"])
+def search():
+    keywords = request.form.get("keywords")
+
+    # ✨ Dummy resource list (simulate real results)
+    resources = [
+        {
+            "title": "Understanding AI Ethics",
+            "type": "Research Paper",
+            "link": "https://arxiv.org/abs/2301.00001",
+            "description": "A foundational paper on ethical concerns in AI."
+        },
+        {
+            "title": "AI Explained Simply",
+            "type": "YouTube Video",
+            "link": "https://www.youtube.com/watch?v=abcd1234",
+            "description": "A beginner-friendly video on how AI works."
+        },
+        {
+            "title": "Recent Breakthrough in AI",
+            "type": "News Article",
+            "link": "https://techcrunch.com/sample-news",
+            "description": "Latest news on cutting-edge AI research."
+        }
+    ]
+
+    return render_template("results.html", keywords=keywords, resources=resources)
