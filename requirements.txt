@@ -8,3 +8,4 @@ PyMuPDF==1.23.9             # PDF parsing, if needed
 google-search-results==1.2.0  # Google search API
 feedparser==6.0.10          # RSS feed parsing
 gunicorn
+serpapi
